@@ -8,19 +8,23 @@ from services.auth_service import get_current_admin
 router = APIRouter()
 
 @router.post("/add-admin", response_model=AdminDBBase)
-async def add_admin_route(admin_data: Admin, db: Session = Depends(get_db)):
-    return await add_admin_controller(admin_data, db=db)
-
+async def add_admin_route(
+    admin_data: Admin, 
+    db: Session = Depends(get_db),
+    cur_admin = Depends(get_current_admin)
+):
+    # Pass the resolved dependencies to the controller
+    return await add_admin_controller(admin_data, cur_admin, db)
 
 @router.get("/admins/{degree}", response_model=list[AdminResponse])
 @router.get("/admins/", response_model=list[AdminResponse])
 async def get_admins_route(
-    degree: str | None = None,
+    degree: str | None = None, 
     db: Session = Depends(get_db),
-    cur_admin=Depends(get_current_admin)
+    cur_admin = Depends(get_current_admin)
 ):
-    return await get_admins_controller(degree, db=db, cur_admin=cur_admin)
+    return await get_admins_controller(degree, cur_admin, db)
 
 @router.post("/register-admin", response_model=AdminDBBase)
 async def register_master(admin_data: Admin, db: Session = Depends(get_db)):
-    return regiadmin(admin_data, db=db)
+    return regiadmin(admin_data, db)
