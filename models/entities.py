@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Text, Float
+from sqlalchemy import Column, Integer, String, Boolean, Text, Float
+from pgvector.sqlalchemy import Vector
 from models.database import Base
 
 class User(Base):

@@ -50,3 +50,4 @@ async def login(login_data: LoginRequest, db: Session) -> Token:
         is_admin=is_admin
     )
     return {"access_token": access_token, "token_type": "bearer"}
+    

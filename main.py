@@ -1,21 +1,12 @@
-import logging
-import os
-from dotenv import load_dotenv
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from models.entities import Base
 from models.database import engine
 from routes.auth_routes import router as auth_router
 from routes.project_routes import router as project_router
 from routes.admin_routes import router as admin_router
-
-# Load environment variables
-load_dotenv()
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from fastapi.middleware.cors import CORSMiddleware
+import os
 
 app = FastAPI(
     title="Project Management API",
@@ -23,14 +14,19 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Configure CORS
-# frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+# CORS configuration
 # app.add_middleware(
 #     CORSMiddleware,
-#     allow_origins=[frontend_url],
+#     allow_origins=[
+#         "http://localhost:3000",
+#         "http://localhost:8080", 
+#         "https://*.vercel.app",
+#         "https://*.netlify.app",
+#         "*"  # Remove this in production
+#     ],
 #     allow_credentials=True,
-#     allow_methods=["GET", "POST", "PUT", "DELETE"],
-#     allow_headers=["Authorization", "Content-Type"],
+#     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+#     allow_headers=["*"],
 # )
 
 app.add_middleware(
@@ -41,28 +37,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Health check endpoint
+# Health check first (before DB operations)
 @app.get("/health")
 async def health_check():
-    """Check the health status of the API."""
     return {"status": "healthy", "version": "1.0.0"}
 
 @app.get("/")
 async def root():
-    """Root endpoint providing API information."""
     return {
         "message": "Project Management API is running!",
         "version": "1.0.0",
         "docs": "/docs"
     }
 
-# Create database tables
+# Create tables if they don't exist
 try:
     Base.metadata.create_all(bind=engine)
-    logger.info("Database tables created successfully")
+    print("Database tables created successfully")
 except Exception as e:
-    logger.error(f"Failed to create database tables: {e}")
-    raise
+    print(f"Database table creation warning: {e}")
+
 
 # Include routers
 app.include_router(auth_router, prefix="/v1", tags=["Authentication"])
@@ -70,4 +64,5 @@ app.include_router(project_router, prefix="/v1", tags=["Projects"])
 app.include_router(admin_router, prefix="/v1", tags=["Admin"])
 
 if __name__ == "__main__":
-    uvicorn.run(app=app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app=app, host="0.0.0.0", port=port)

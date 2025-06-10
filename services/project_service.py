@@ -5,7 +5,6 @@ from models.schemas import ProjectBase
 
 
 def upload_project(data: ProjectBase, uploader_username: str, db: Session) -> dict:
-    tools_str = " ".join(data.tools)
 
     if db.query(Project).filter(Project.title == data.title).first():
         raise HTTPException(status_code=500, detail="Project title already exists")

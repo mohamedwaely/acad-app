@@ -9,15 +9,12 @@ load_dotenv()
 
 # URL-encode the password to handle special characters
 db_password = urllib.parse.quote_plus(os.getenv('db_password'))
-host= urllib.parse.quote_plus(os.getenv('db_host'))
-port= urllib.parse.quote_plus(os.getenv('db_port'))
-db_name= urllib.parse.quote_plus(os.getenv('db_name'))
-db_user= urllib.parse.quote_plus(os.getenv('db_user'))
+
 DATABASE_URL = (
     f"postgresql+psycopg://"
-    f"{db_user}:{db_password}@"
-    f"{host}:{port}/"
-    f"{db_name}?sslmode=require"
+    f"{os.getenv('db_user')}:{db_password}@"
+    f"{os.getenv('db_host')}:{os.getenv('db_port')}/"
+    f"{os.getenv('db_name')}?sslmode=require"
 )
 
 engine = create_engine(DATABASE_URL)
