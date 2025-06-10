@@ -14,6 +14,14 @@ app = FastAPI(
     version="1.0.0"
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Health check first (before DB operations)
 @app.get("/health")
 async def health_check():
@@ -41,5 +49,4 @@ app.include_router(project_router, prefix="/v1", tags=["Projects"])
 app.include_router(admin_router, prefix="/v1", tags=["Admin"])
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))
-    uvicorn.run(app=app, host="0.0.0.0", port=port)
+    uvicorn.run(app=app, host="127.0.0.1", port=8000)
