@@ -8,12 +8,9 @@ from services.auth_service import get_current_admin
 router = APIRouter()
 
 @router.post("/add-admin", response_model=AdminDBBase)
-async def add_admin_route(
-    admin_data: Admin,
-    db: Session = Depends(get_db),
-    cur_admin=Depends(get_current_admin)
-):
-    return await add_admin_controller(admin_data, db=db, cur_admin=cur_admin)
+async def add_admin_route(admin_data: Admin, db: Session = Depends(get_db)):
+    return await add_admin_controller(admin_data, db=db)
+
 
 @router.get("/admins/{degree}", response_model=list[AdminResponse])
 @router.get("/admins/", response_model=list[AdminResponse])

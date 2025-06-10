@@ -37,6 +37,7 @@ async def add_admin_controller(
 ) -> AdminDBBase:
     return add_admin(admin_data, cur_admin.email, cur_admin.degree, db)
 
+
 async def get_admins_controller(
     degree: str | None = None,
     db: Session = Depends(get_db),
