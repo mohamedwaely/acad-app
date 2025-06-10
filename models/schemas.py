@@ -75,6 +75,7 @@ class LoginRequest(BaseModel):
     email: EmailStr
     password: str
 
+
 class ProjectBase(BaseModel):
     title: str
     supervisor: str
