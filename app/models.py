@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Text
+from sqlalchemy import Column, Integer, String, Boolean, Text, Float
 from app.db import Base
 
 class User(Base):
@@ -30,3 +30,12 @@ class Project(Base):
     tools = Column(Text, nullable=False)
     supervisor = Column(String(100), nullable=False)
     year = Column(Integer, nullable=False)
+
+class PreProjects(Base):
+    __tablename__ = "preprojects"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String(100), unique=True, nullable=False)
+    description = Column(Text, nullable=False)
+    year = Column(Integer, nullable=False)
+    maxSimScore = Column(Float, nullable=True)
