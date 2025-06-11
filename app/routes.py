@@ -15,8 +15,6 @@ router = APIRouter()
 @router.post("/v1/upload-project")
 async def upload_projects(data: schemas.ProjectBase, cur_admin: schemas.AdminDB = Depends(auth.getCurrentAdmin), db: Session = Depends(get_db)):
     tools_str = " ".join(data.tools)
-    doc = f"{data.title} {data.supervisor} {data.description} {tools_str} {data.year}"
-    doc_embedding = embeddings.embed_query(doc)
 
     proj = models.Project(
         uploader=cur_admin.username,
@@ -25,7 +23,6 @@ async def upload_projects(data: schemas.ProjectBase, cur_admin: schemas.AdminDB 
         tools=tools_str,
         supervisor=data.supervisor,
         year=data.year,
-        embedding=doc_embedding
     )
     if db.query(models.Project).filter(models.Project.title == data.title).first():
         raise HTTPException(status_code=500, detail=f"Project title already exists")
