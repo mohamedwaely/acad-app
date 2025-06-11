@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, Boolean, Text, Float
-from models.database import Base
+from sqlalchemy import Column, Integer, String, Boolean, Text
+from app.db import Base
 
 class User(Base):
     __tablename__ = "users"
@@ -8,6 +8,7 @@ class User(Base):
     username = Column(String(100), unique=True, nullable=False, index=True)
     email = Column(String(255), unique=True, nullable=False, index=True)
     hashed_password = Column(String(255), nullable=False)
+
 
 class Admin(Base):
     __tablename__ = "admins"
@@ -29,12 +30,3 @@ class Project(Base):
     tools = Column(Text, nullable=False)
     supervisor = Column(String(100), nullable=False)
     year = Column(Integer, nullable=False)
-
-class PreProjects(Base):
-    __tablename__ = "preprojects"
-
-    id = Column(Integer, primary_key=True)
-    title = Column(String(100), unique=True, nullable=False)
-    description = Column(Text, nullable=False)
-    year = Column(Integer, nullable=False)
-    maxSimScore = Column(Float, nullable=True)

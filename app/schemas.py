@@ -69,11 +69,12 @@ class Token(BaseModel):
     token_type: str
 
 class TokenData(BaseModel):
-    email: Optional[EmailStr] = None
+    email: Optional[EmailStr] = None  # Use email instead of username
 
 class LoginRequest(BaseModel):
-    email: EmailStr
+    email: EmailStr  # Use email instead of username
     password: str
+
 
 class ProjectBase(BaseModel):
     title: str
@@ -100,9 +101,10 @@ class ProjectResponse(BaseModel):
     class Config:
         from_attributes = True
 
-class CheckProject(BaseModel):
+class checkProject(BaseModel):
     title: str
     description: str
+
 
 class AdminResponse(BaseModel):
     id: int
@@ -112,6 +114,7 @@ class AdminResponse(BaseModel):
     added_by: str
     class Config:
         from_attributes = True
+    
 
 class ProjectsResponse(BaseModel):
     id: int
@@ -122,3 +125,4 @@ class ProjectsResponse(BaseModel):
     year: int
     class Config:   
         from_attributes = True
+
